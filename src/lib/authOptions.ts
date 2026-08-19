@@ -2,7 +2,6 @@ import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { supabase } from "@/lib/supabase";
 
-// 허용된 관리자 UUID 화이트리스트 (지정된 관리자 계정만 허용)
 export const ALLOWED_ADMIN_IDS = [
   "f141410b-991c-48f9-80c4-5fc23bdb6921",
   "f91a2e4a-f2b6-4c09-a7d4-afae43684c45",
@@ -37,12 +36,10 @@ export const authOptions: NextAuthOptions = {
 
       const userEmail = user.email.toLowerCase();
 
-      // 1) 허용된 관리자 이메일 검사
       if (ALLOWED_ADMIN_EMAILS.includes(userEmail)) {
         return true;
       }
 
-      // 2) Supabase users 테이블에서 사용자 ID 조회 및 화이트리스트 검사
       try {
         const { data } = await supabase
           .from("users")
@@ -57,7 +54,6 @@ export const authOptions: NextAuthOptions = {
         console.error("Admin authorization error:", err);
       }
 
-      // 관리자 권한 없는 계정은 로그인 거부 (AccessDenied)
       return false;
     },
     async jwt({ token, user }) {

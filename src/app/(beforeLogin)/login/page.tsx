@@ -1,9 +1,11 @@
 "use client";
 
 import { Suspense, useState } from "react";
+import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { RefreshCw } from "lucide-react";
+import logoImg from "@/assets/logo.png";
 
 function LoginForm() {
   const searchParams = useSearchParams();
@@ -15,8 +17,8 @@ function LoginForm() {
     urlError === "AccessDenied"
       ? "접근 권한이 없는 계정입니다. 지정된 관리자 계정으로만 로그인할 수 있습니다."
       : urlError
-      ? "로그인 중 오류가 발생했습니다. 다시 시도해 주세요."
-      : null
+        ? "로그인 중 오류가 발생했습니다. 다시 시도해 주세요."
+        : null,
   );
 
   const handleGoogleLogin = async () => {
@@ -31,29 +33,51 @@ function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md bg-slate-900/80 backdrop-blur-2xl border border-slate-800 rounded-3xl p-8 shadow-2xl shadow-black/60 relative z-10">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
-          연OX
-        </h1>
-        <p className="text-xs text-slate-400 mt-1.5">
-          관리자 계정으로 로그인하여 서비스를 관리하세요.
-        </p>
+    <div className="w-full max-w-md bg-white border border-slate-200/80 rounded-[32px] p-8 shadow-xl shadow-slate-200/50 relative z-10">
+      <div className="flex flex-col items-center text-center mb-6">
+        <Image
+          src={logoImg}
+          alt="연OX"
+          priority
+          className="h-20 w-auto object-contain mb-3"
+        />
+        <h2 className="text-xl font-extrabold text-[#0F172A] tracking-tight leading-snug">
+          건강한 연애를 위한<br />연애 커뮤니티 관리자 콘솔
+        </h2>
+      </div>
+
+      <div className="my-6 space-y-3">
+        <div className="flex justify-start">
+          <div className="bg-[#F5F5F5] px-4 py-2.5 rounded-2xl rounded-tl-sm text-sm font-semibold text-[#0F172A] shadow-sm max-w-[85%]">
+            ...내가 예민한걸까?
+          </div>
+        </div>
+
+        <div className="flex justify-end">
+          <div className="bg-[#F5F1FF] px-4 py-2.5 rounded-2xl rounded-tr-sm text-sm font-semibold text-[#0F172A] shadow-sm max-w-[85%]">
+            <span className="text-[#8B75F9] font-black mr-1">O</span> 그 정도는 봐줄 수 있지
+          </div>
+        </div>
+
+        <div className="flex justify-end">
+          <div className="bg-[#FFF3F4] px-4 py-2.5 rounded-2xl rounded-tr-sm text-sm font-semibold text-[#0F172A] shadow-sm max-w-[85%]">
+            <span className="text-[#FF5D7B] font-black mr-1">X</span> 나같아도 서운해
+          </div>
+        </div>
       </div>
 
       {errorMsg && (
-        <div className="mb-6 p-3.5 rounded-xl bg-rose-950/40 border border-rose-800/60 text-xs text-rose-300 leading-relaxed">
+        <div className="mb-5 p-3.5 rounded-2xl bg-[#FFF3F4] border border-[#FF5D7B]/30 text-xs font-bold text-[#FF5D7B] leading-relaxed">
           {errorMsg}
         </div>
       )}
 
-      <div className="space-y-3">
-        {/* Google Login Button */}
+      <div className="space-y-3 mt-6">
         <button
           type="button"
           onClick={handleGoogleLogin}
           disabled={loading}
-          className="w-full h-12 flex items-center justify-center gap-3 px-4 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-semibold text-sm transition-all shadow-md active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          className="w-full h-12 flex items-center justify-center gap-3 px-4 rounded-2xl bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 font-bold text-sm transition-all shadow-sm active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path
@@ -79,16 +103,16 @@ function LoginForm() {
         </button>
       </div>
 
-      <div className="mt-8 pt-6 border-t border-slate-800 flex items-center justify-center gap-4 text-xs text-slate-500">
-        <a href="/about" className="hover:text-slate-300 transition-colors">
+      <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-center gap-4 text-xs font-semibold text-slate-400">
+        <a href="/about" className="hover:text-slate-700 transition-colors">
           서비스 소개
         </a>
         <span>•</span>
-        <a href="/privacy" className="hover:text-slate-300 transition-colors">
+        <a href="/privacy" className="hover:text-slate-700 transition-colors">
           개인정보처리방침
         </a>
         <span>•</span>
-        <a href="/terms" className="hover:text-slate-300 transition-colors">
+        <a href="/terms" className="hover:text-slate-700 transition-colors">
           서비스 이용약관
         </a>
       </div>
@@ -98,15 +122,14 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 relative overflow-hidden text-slate-100">
-      {/* Background glow effects */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 translate-y-1/2 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-4 relative overflow-hidden text-[#0F172A]">
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#FFF3F4] rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 translate-y-1/2 w-96 h-96 bg-[#F5F1FF] rounded-full blur-3xl pointer-events-none" />
 
       <Suspense
         fallback={
-          <div className="w-full max-w-md bg-slate-900/80 border border-slate-800 rounded-3xl p-8 flex items-center justify-center text-slate-400">
-            <RefreshCw size={24} className="animate-spin text-rose-500" />
+          <div className="w-full max-w-md bg-white border border-slate-200 rounded-[32px] p-8 flex items-center justify-center text-slate-400 shadow-xl">
+            <RefreshCw size={24} className="animate-spin text-[#FF5D7B]" />
           </div>
         }
       >
