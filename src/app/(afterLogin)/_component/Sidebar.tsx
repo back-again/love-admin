@@ -23,7 +23,12 @@ const NAV_ITEMS = [
   { href: "/categories", label: "카테고리 관리", icon: Tag },
   { href: "/reports", label: "신고 내역", icon: AlertTriangle },
   { href: "/inquiries", label: "문의 / 피드백", icon: HelpCircle },
-  { href: "/ai-tester", label: "AI 검수 테스터", icon: Sparkles, highlight: true },
+  {
+    href: "/ai-prompts",
+    label: "AI 프롬프트 관리",
+    icon: Sparkles,
+    highlight: true,
+  },
 ];
 
 export default function Sidebar() {
@@ -63,7 +68,7 @@ export default function Sidebar() {
                       isActive && item.highlight,
                     "text-slate-600 hover:text-slate-900 hover:bg-slate-100/70":
                       !isActive,
-                  }
+                  },
                 )}
               >
                 <Icon size={18} />
