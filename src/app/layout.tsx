@@ -3,8 +3,11 @@ import Providers from '@/components/Providers';
 import '@/index.css';
 
 export const metadata: Metadata = {
-  title: 'LOVE ADMIN - Service Management',
-  description: 'Love Admin Service Management Dashboard',
+  title: '연OX (XOXO) - 서비스 및 관리자',
+  description: '연OX (XOXO) 서비스 및 관리 콘솔',
+  verification: {
+    google: 'D2yfu5dFgRdP43LeXVp8AB5J0xfbWm4xSOzFt836atE',
+  },
 };
 
 export default function RootLayout({
