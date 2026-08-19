@@ -160,12 +160,17 @@ export default function DashboardPage() {
   const handleDeletePost = async (id: string) => {
     if (!confirm('정말 이 게시글을 삭제하시겠습니까? 관련 투표와 댓글도 함께 삭제됩니다.')) return;
     try {
-      const { error } = await supabase.from('posts').delete().eq('id', id);
-      if (!error) {
+      const res = await fetch('/api/admin/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'post', id }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
         setPosts(prev => prev.filter(p => p.id !== id));
         alert('게시글이 삭제되었습니다.');
       } else {
-        alert('삭제 실패: ' + error.message);
+        alert('삭제 실패: ' + (data.error || '오류가 발생했습니다.'));
       }
     } catch (e: any) {
       alert('오류: ' + e.message);
@@ -175,12 +180,17 @@ export default function DashboardPage() {
   const handleDeleteComment = async (id: string) => {
     if (!confirm('정말 이 댓글을 삭제하시겠습니까?')) return;
     try {
-      const { error } = await supabase.from('comments').delete().eq('id', id);
-      if (!error) {
+      const res = await fetch('/api/admin/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'comment', id }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
         setComments(prev => prev.filter(c => c.id !== id));
         alert('댓글이 삭제되었습니다.');
       } else {
-        alert('삭제 실패: ' + error.message);
+        alert('삭제 실패: ' + (data.error || '오류가 발생했습니다.'));
       }
     } catch (e: any) {
       alert('오류: ' + e.message);
