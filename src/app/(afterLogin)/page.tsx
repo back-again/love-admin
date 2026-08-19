@@ -1,5 +1,8 @@
+'use client';
+
 import { useEffect, useState } from 'react';
-import { supabase } from './lib/supabase';
+import { useSession, signOut } from 'next-auth/react';
+import { supabase } from '@/lib/supabase';
 import {
   LayoutDashboard,
   FileText,
@@ -13,13 +16,17 @@ import {
   Users,
   CheckCircle,
   XCircle,
+  LogOut,
+  User as UserIcon,
 } from 'lucide-react';
 import { format } from 'date-fns';
 
 type TabType = 'overview' | 'posts' | 'comments' | 'reports' | 'inquiries' | 'ai-tester';
 
-export default function App() {
+export default function DashboardPage() {
+  const { data: session, status } = useSession();
   const [activeTab, setActiveTab] = useState<TabType>('overview');
+
   const [stats, setStats] = useState({
     userCount: 0,
     postCount: 0,
@@ -220,7 +227,7 @@ export default function App() {
           <nav className="space-y-1.5">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${
                 activeTab === 'overview'
                   ? 'bg-rose-500 text-white shadow-md shadow-rose-500/25'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -232,7 +239,7 @@ export default function App() {
 
             <button
               onClick={() => setActiveTab('posts')}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${
                 activeTab === 'posts'
                   ? 'bg-rose-500 text-white shadow-md shadow-rose-500/25'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -244,7 +251,7 @@ export default function App() {
 
             <button
               onClick={() => setActiveTab('comments')}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${
                 activeTab === 'comments'
                   ? 'bg-rose-500 text-white shadow-md shadow-rose-500/25'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -256,7 +263,7 @@ export default function App() {
 
             <button
               onClick={() => setActiveTab('reports')}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${
                 activeTab === 'reports'
                   ? 'bg-rose-500 text-white shadow-md shadow-rose-500/25'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -268,7 +275,7 @@ export default function App() {
 
             <button
               onClick={() => setActiveTab('inquiries')}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${
                 activeTab === 'inquiries'
                   ? 'bg-rose-500 text-white shadow-md shadow-rose-500/25'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -280,7 +287,7 @@ export default function App() {
 
             <button
               onClick={() => setActiveTab('ai-tester')}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${
                 activeTab === 'ai-tester'
                   ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-indigo-500/25'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -292,9 +299,43 @@ export default function App() {
           </nav>
         </div>
 
-        <div className="pt-4 border-t border-slate-800 text-xs text-slate-500 flex items-center justify-between">
-          <span>Supabase Active</span>
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <div className="pt-4 border-t border-slate-800 space-y-3">
+          <div className="flex items-center justify-between text-xs text-slate-500">
+            <span className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              NextAuth Session Active
+            </span>
+          </div>
+
+          <div className="flex items-center justify-between bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
+            <div className="flex items-center gap-2.5 min-w-0 pr-2">
+              {session?.user?.image ? (
+                <img
+                  src={session.user.image}
+                  alt="avatar"
+                  className="w-7 h-7 rounded-lg object-cover flex-shrink-0"
+                />
+              ) : (
+                <div className="w-7 h-7 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 flex-shrink-0">
+                  <UserIcon size={14} />
+                </div>
+              )}
+              <div className="min-w-0">
+                <p className="text-xs font-semibold text-slate-200 truncate">
+                  {session?.user?.name || session?.user?.email?.split('@')[0] || 'Admin'}
+                </p>
+                <p className="text-[10px] text-slate-400 truncate">{session?.user?.email || 'admin'}</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => signOut({ callbackUrl: '/login' })}
+              title="로그아웃"
+              className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded-lg transition-colors flex-shrink-0 cursor-pointer"
+            >
+              <LogOut size={15} />
+            </button>
+          </div>
         </div>
       </aside>
 
@@ -311,20 +352,30 @@ export default function App() {
             {activeTab === 'ai-tester' && 'Gemini AI 콘텐츠 품질 검수 시뮬레이터'}
           </h2>
 
-          <button
-            onClick={() => {
-              if (activeTab === 'overview') fetchOverviewStats();
-              if (activeTab === 'posts') fetchPosts();
-              if (activeTab === 'comments') fetchComments();
-              if (activeTab === 'reports') fetchReports();
-              if (activeTab === 'inquiries') fetchInquiries();
-            }}
-            disabled={loading}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 transition-colors"
-          >
-            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
-            새로고침
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                if (activeTab === 'overview') fetchOverviewStats();
+                if (activeTab === 'posts') fetchPosts();
+                if (activeTab === 'comments') fetchComments();
+                if (activeTab === 'reports') fetchReports();
+                if (activeTab === 'inquiries') fetchInquiries();
+              }}
+              disabled={loading}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 transition-colors cursor-pointer"
+            >
+              <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+              새로고침
+            </button>
+
+            <button
+              onClick={() => signOut({ callbackUrl: '/login' })}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/20 text-xs font-medium transition-colors cursor-pointer"
+            >
+              <LogOut size={13} />
+              로그아웃
+            </button>
+          </div>
         </header>
 
         {/* Dynamic Tab Body */}
@@ -433,7 +484,7 @@ export default function App() {
                           <td className="py-3.5 px-4 text-right">
                             <button
                               onClick={() => handleDeletePost(p.id)}
-                              className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+                              className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
                             >
                               <Trash2 size={16} />
                             </button>
@@ -486,7 +537,7 @@ export default function App() {
                         <td className="py-3.5 px-4 text-right">
                           <button
                             onClick={() => handleDeleteComment(c.id)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
                           >
                             <Trash2 size={16} />
                           </button>
@@ -516,7 +567,7 @@ export default function App() {
                     {reports.length === 0 ? (
                       <tr>
                         <td colSpan={4} className="text-center py-8 text-slate-500">
-                          접수된 신고 내역이 없습니다.
+                           접수된 신고 내역이 없습니다.
                         </td>
                       </tr>
                     ) : (
@@ -613,7 +664,7 @@ export default function App() {
                   <button
                     onClick={runAiInspect}
                     disabled={aiLoading}
-                    className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold text-sm shadow-lg shadow-indigo-500/25 hover:opacity-95 transition-opacity flex items-center justify-center gap-2"
+                    className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold text-sm shadow-lg shadow-indigo-500/25 hover:opacity-95 transition-opacity flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <Sparkles size={16} className={aiLoading ? 'animate-spin' : ''} />
                     {aiLoading ? 'AI 검수 분석 중...' : 'AI 검수 실행'}
