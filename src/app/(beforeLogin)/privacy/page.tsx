@@ -23,7 +23,7 @@ export default function PrivacyPage() {
             <span>Privacy Policy</span>
           </div>
           <h1 className="text-2xl md:text-3xl font-extrabold text-white">
-            연OX (XOXO) 개인정보처리방침
+            연OX 개인정보처리방침
           </h1>
           <p className="text-xs text-slate-400">
             공고일자: 2026년 08월 19일 | 시행일자: 2026년 08월 19일

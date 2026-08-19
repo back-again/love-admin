@@ -3,8 +3,8 @@ import Providers from '@/components/Providers';
 import '@/index.css';
 
 export const metadata: Metadata = {
-  title: '연OX (XOXO) - 서비스 및 관리자',
-  description: '연OX (XOXO) 서비스 및 관리 콘솔',
+  title: '연OX',
+  description: '연OX - 집단지성과 AI로 푸는 연애 고민 솔루션',
   verification: {
     google: 'D2yfu5dFgRdP43LeXVp8AB5J0xfbWm4xSOzFt836atE',
   },

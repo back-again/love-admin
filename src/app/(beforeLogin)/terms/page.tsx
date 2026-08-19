@@ -23,7 +23,7 @@ export default function TermsPage() {
             <span>Terms of Service</span>
           </div>
           <h1 className="text-2xl md:text-3xl font-extrabold text-white">
-            연OX (XOXO) 서비스 이용약관
+            연OX 서비스 이용약관
           </h1>
           <p className="text-xs text-slate-400">
             공고일자: 2026년 08월 19일 | 시행일자: 2026년 08월 19일
