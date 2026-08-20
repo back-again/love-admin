@@ -4,13 +4,10 @@ import { supabase } from "@/lib/supabase";
 
 export const ALLOWED_ADMIN_IDS = [
   "f141410b-991c-48f9-80c4-5fc23bdb6921",
-  "f91a2e4a-f2b6-4c09-a7d4-afae43684c45",
+  "b771f571-208a-4dbe-a4d2-4fa9b97b8a75",
 ];
 
-export const ALLOWED_ADMIN_EMAILS = [
-  "bur5698@gmail.com",
-  "f9g24ctwwr@privaterelay.appleid.com",
-];
+export const ALLOWED_ADMIN_EMAILS = ["bur5698@gmail.com", "rsj01223@gmail.com"];
 
 export const authOptions: NextAuthOptions = {
   providers: [
